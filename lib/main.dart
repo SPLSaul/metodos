@@ -26,9 +26,9 @@ class MyApp extends StatelessWidget {
                         MaterialPageRoute(builder: (context) => NewtonRaphsonNormal()),
                       );
                     },
-                    child: Text("Newton Raphson Normal"),
+                    child: Text("Newton Raphson Normal",style: TextStyle(fontSize: MediaQuery.of(context).textScaleFactor * 50,color: Colors.deepPurple.shade900,fontWeight: FontWeight.bold),),
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.white12),
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.limeAccent.shade100),
                     ),
                   ),
                 ),
@@ -42,9 +42,9 @@ class MyApp extends StatelessWidget {
                         MaterialPageRoute(builder: (context) => NewtonRaphsonMejorado()),
                       );
                     },
-                    child: Text("Newton Raphson Mejorado"),
+                    child: Text("Newton Raphson Mejorado",style: TextStyle(fontSize: MediaQuery.of(context).textScaleFactor * 50,color: Colors.deepPurple.shade900,fontWeight: FontWeight.bold ),),
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.white12),
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.tealAccent.shade100),
                     ),
                   ),
                 ),
@@ -70,8 +70,17 @@ class _NewtonRaphsonNormalState extends State<NewtonRaphsonNormal> {
       appBar: AppBar(
         title: Text('Newton Raphson Normal'),
       ),
-      body: Center(
-        child: Text('Newton Raphson Normal'),
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 10.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            SizedBox(height: 10), // Espacio en blanco para separar del borde superior
+            TextField(
+              decoration: InputDecoration(hintText: 'Introduce la función: '),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -89,8 +98,17 @@ class _NewtonRaphsonMejoradoState extends State<NewtonRaphsonMejorado> {
       appBar: AppBar(
         title: Text('Newton Raphson Mejorado'),
       ),
-      body: Center(
-        child: Text('Newton Raphson Mejorado'),
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 10.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            SizedBox(height: 10), // Espacio en blanco para separar del borde superior
+            TextField(
+              decoration: InputDecoration(hintText: 'Introduce la función: '),
+            ),
+          ],
+        ),
       ),
     );
   }
