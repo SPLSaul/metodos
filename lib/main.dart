@@ -78,6 +78,39 @@ class _NewtonRaphsonNormalState extends State<NewtonRaphsonNormal> {
             SizedBox(height: 10), // Espacio en blanco para separar del borde superior
             TextField(
               decoration: InputDecoration(hintText: 'Introduce la función: '),
+              onChanged: (text){},
+            ),
+            TextField(decoration: InputDecoration(hintText: 'Introduce la funcion derivada'),onChanged: (text){},),
+            SizedBox(height: 10),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: 'Valor inicial de x:',
+                    ),
+                    onChanged: (text) {},
+                  ),
+                ),
+                SizedBox(width: 10),
+                Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: 'Error a encontrar:',
+                    ),
+                    onChanged: (text) {},
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text('Presionado'),),);
+              },
+              child: Text('Calcular',style: TextStyle(fontSize: 20,color: Colors.black,fontWeight: FontWeight.bold),),
+              style: ElevatedButton.styleFrom(primary: Colors.lightGreen),
             ),
           ],
         ),
@@ -106,6 +139,39 @@ class _NewtonRaphsonMejoradoState extends State<NewtonRaphsonMejorado> {
             SizedBox(height: 10), // Espacio en blanco para separar del borde superior
             TextField(
               decoration: InputDecoration(hintText: 'Introduce la función: '),
+              onChanged: (text){},
+            ),
+            TextField(decoration: InputDecoration(hintText: 'Introduce la funcion derivada: '), onChanged: (text){},),
+            TextField(decoration: InputDecoration(hintText: 'Introduce la segunda derivada de la funcion: '), onChanged: (text){},),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: 'Valor inicial de x:',
+                    ),
+                    onChanged: (text) {},
+                  ),
+                ),
+                SizedBox(width: 10),
+                Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: 'Error a encontrar:',
+                    ),
+                    onChanged: (text) {},
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text('Presionado'),),);
+              },
+              child: Text('Calcular',style: TextStyle(fontSize: 20,color: Colors.black,fontWeight: FontWeight.bold),),
+              style: ElevatedButton.styleFrom(primary: Colors.lightGreen),
             ),
           ],
         ),
