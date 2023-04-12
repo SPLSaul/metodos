@@ -13,46 +13,96 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: Text('Selecciona el metodo:'),
         ),
-        body: Center(
+        body: SingleChildScrollView(
+          child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(height: 20),
-              Expanded(
+              SizedBox(
+                width: double.infinity,
+                height: 300,
                 child: Builder(
-                  builder: (context) => ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => NewtonRaphsonNormal()),
-                      );
-                    },
-                    child: Text("Newton Raphson Normal",style: TextStyle(fontSize: MediaQuery.of(context).textScaleFactor * 50,color: Colors.deepPurple.shade900,fontWeight: FontWeight.bold),),
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.limeAccent.shade100),
+                  builder: (context) => Expanded(
+                    flex: 1,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => NewtonRaphsonNormal()),
+                        );
+                      },
+                      child: Text(
+                        "Newton Raphson Normal",
+                        style: TextStyle(
+                            fontSize: MediaQuery.of(context).textScaleFactor * 40,
+                            color: Colors.deepPurple.shade900,
+                            fontWeight: FontWeight.bold
+                        ),
+                      ),
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.limeAccent.shade100),
+                      ),
                     ),
                   ),
                 ),
               ),
-              SizedBox(height: 20),
-              Expanded(
+              SizedBox(
+                width: double.infinity,
+                height: 300,
                 child: Builder(
-                  builder: (context) => ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => NewtonRaphsonMejorado()),
-                      );
-                    },
-                    child: Text("Newton Raphson Mejorado",style: TextStyle(fontSize: MediaQuery.of(context).textScaleFactor * 50,color: Colors.deepPurple.shade900,fontWeight: FontWeight.bold ),),
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.tealAccent.shade100),
+                  builder: (context) => Expanded(
+                    flex: 1,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => NewtonRaphsonMejorado()),
+                        );
+                      },
+                      child: Text(
+                        "Newton Raphson Mejorado",
+                        style: TextStyle(
+                            fontSize: MediaQuery.of(context).textScaleFactor * 40,
+                            color: Colors.deepPurple.shade900,
+                            fontWeight: FontWeight.bold
+                        ),
+                      ),
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.tealAccent.shade100),
+                      ),
                     ),
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              SizedBox(
+                width: double.infinity,
+                height: 200,
+                child: Builder(
+                  builder: (context) => Expanded(
+                    flex: 1,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => Ejemplo()),
+                        );
+                      },
+                      child: Text(
+                        "Ejemplos",
+                        style: TextStyle(
+                            fontSize: MediaQuery.of(context).textScaleFactor * 40,
+                            color: Colors.deepPurple.shade900,
+                            fontWeight: FontWeight.bold
+                        ),
+                      ),
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.deepOrange),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
+      ),
       ),
     );
   }
@@ -174,6 +224,23 @@ class _NewtonRaphsonMejoradoState extends State<NewtonRaphsonMejorado> {
               style: ElevatedButton.styleFrom(primary: Colors.lightGreen),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class Ejemplo extends StatelessWidget{
+  @override
+  Widget build(BuildContext buildContext){
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Selecciona el ejemplo'),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(buildContext).pop(),
+          ),
         ),
       ),
     );
