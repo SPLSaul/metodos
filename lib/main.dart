@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:math_expressions/math_expressions.dart';
 import 'dart:math';
 
 void main() {
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
                         onPressed: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                                builder: (context) => NewtonRaphsonNormal()),
+                                builder: (context) => NewtonRaphson()),
                           );
                         },
                         child: Text(
@@ -76,7 +77,7 @@ class MyApp extends StatelessWidget {
                       ),
                     ),
                   ),
-                ),
+                ),                  
                 SizedBox(
                   width: double.infinity,
                   height: 200,
@@ -130,34 +131,49 @@ class NewtonRaphsonMejorado extends StatefulWidget {
 }
 
 
-class NewtonRaphsonNormal extends StatefulWidget {
+class NewtonRaphson extends StatefulWidget {
   @override
-  _NewtonRaphsonNormalState createState() => _NewtonRaphsonNormalState();
+  _NewtonRaphsonState createState() => _NewtonRaphsonState();
 }
 
-class _NewtonRaphsonNormalState extends State<NewtonRaphsonNormal> {
+class _NewtonRaphsonState extends State<NewtonRaphson> {
 
   final formKey = new GlobalKey<FormState>();
-  var funcionN_Controller = new TextEditingController();
-  var funcionDerivadaN_Controller = new TextEditingController();
-  var xInicialN_Controller = new TextEditingController();
-  var errorEncontrarN_Controller = new TextEditingController();
+  var funcion_Controller = new TextEditingController();
+  var funcionDerivada_Controller = new TextEditingController();
+  var funcionSegundaDerivada_Controller = new TextEditingController();
+  var xInicial_Controller = new TextEditingController();
+  var errorEncontrar_Controller = new TextEditingController();
 
-  validate(){
+  validate() {
     if (formKey.currentState!.validate()) {
+      String funcion = funcion_Controller.text;
+      String funcionDerivada = funcionDerivada_Controller.text;
+      String funcionSegundaDerivada = funcionSegundaDerivada_Controller.text;
+      double xInicial = double.parse(xInicial_Controller.text);
+      double error = double.parse(errorEncontrar_Controller.text);
 
-      String funcion = funcionN_Controller.text;
-      String funcionDerivada = funcionDerivadaN_Controller.text;
-      double xInicial = double.parse(xInicialN_Controller.text);
-      double error = double.parse(errorEncontrarN_Controller.text);
+      // Convertir texto en Expression
+      Parser p = Parser();
+      Expression expFuncion = p.parse(funcion);
+      Expression expDerivada = p.parse(funcionDerivada);
+      Expression expSegundaDerivada = p.parse(funcionSegundaDerivada);
+
+      // Evaluar la expresión usando un `ContextModel`
+      ContextModel cm = ContextModel();
+      cm.bindVariableName('x', Number(xInicial));
+      double resultadoFuncion = expFuncion.evaluate(EvaluationType.REAL, cm);
+      double resultadoDerivada = expDerivada.evaluate(EvaluationType.REAL, cm);
+      double resultadoSegundaDerivada = expSegundaDerivada.evaluate(EvaluationType.REAL, cm);
+
       Datos datos = Datos.normal(
-          funcion, funcionDerivada, xInicial, error);
+          funcion, funcionDerivada,  xInicial, error);
 
-      funcionN_Controller.text = "";
-      funcionDerivadaN_Controller.text = "";
-      xInicialN_Controller.text = " ";
-      errorEncontrarN_Controller.text = " ";
-
+      funcion_Controller.text = "";
+      funcionDerivada_Controller.text = "";
+      funcionSegundaDerivada_Controller.text = "";
+      xInicial_Controller.text = " ";
+      errorEncontrar_Controller.text = " ";
     }
   }
   bool NotDoubleCheck(var N) {
@@ -174,87 +190,98 @@ class _NewtonRaphsonNormalState extends State<NewtonRaphsonNormal> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Newton Raphson Normal'),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              SizedBox(
-                  height:
-                  10), // Espacio en blanco para separar del borde superior
-              TextFormField(
-                decoration: InputDecoration(hintText: 'Introduce la función: '),
-                controller: funcionN_Controller,
-                keyboardType: TextInputType.text,
-                validator: (val) =>
-                val?.length == 0 ? 'No has ingresado la funcion' : null,
-              ),
-              TextFormField(
-                decoration:
-                InputDecoration(hintText: 'Introduce la funcion derivada: '),
-                controller: funcionDerivadaN_Controller,
-                keyboardType: TextInputType.text,
-                validator: (val) =>
-                val!.length == 0 ? 'No has ingresado la función derivada' : null,
-
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        hintText: 'Valor inicial de x:',
-                      ),
-                      controller: xInicialN_Controller,
-                      keyboardType: TextInputType.number,
-                      validator: (val) => NotDoubleCheck(val)
-                          ? 'Introduce un valor numerico'
-                          : null,
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  Expanded(
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        hintText: 'Error a encontrar:',
-                      ),
-                      controller: errorEncontrarN_Controller,
-                      keyboardType: TextInputType.number,
-                      validator: (val) => NotDoubleCheck(val)
-                          ? 'Introduce un valor numerico'
-                          : null,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 10),
-              ElevatedButton(
-                onPressed:validate,
-                child: Text(
-                  'Calcular',
-                  style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold),
-                ),
-                style: ElevatedButton.styleFrom(primary: Colors.lightGreen),
-              ),
-              DataTable(
-                columns: [
-                  DataColumn(label: Text('Iteracion')),
-                  DataColumn(label: Text('x')),
-                  DataColumn(label: Text('Error')),
-                ],
-                rows: _rows,
-              ),
-            ],
-          ),
+        appBar: AppBar(
+          title: Text('Newton Raphson'),
         ),
-      ),
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10.0),
+          child: Form(
+            key: formKey, // referencia a la clave global del formulario
+            autovalidateMode: AutovalidateMode.always, // activa la validación automática
+            child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(
+                    height:
+                    10), // Espacio en blanco para separar del borde superior
+                TextFormField(
+                  decoration: InputDecoration(hintText: 'Introduce la función: '),
+                  controller: funcion_Controller,
+                  keyboardType: TextInputType.text,
+                  validator: (val) =>
+                  val?.length == 0 ? 'No has ingresado la funcion' : null,
+                ),
+                TextFormField(
+                  decoration:
+                  InputDecoration(hintText: 'Introduce la funcion derivada: '),
+                  controller: funcionDerivada_Controller,
+                  keyboardType: TextInputType.text,
+                  validator: (val) =>
+                  val?.length == 0 ? 'No has ingresado la funcion' : null,
+                ),
+                TextFormField(
+                  decoration: InputDecoration(
+                      hintText: 'Introduce la segunda derivada de la funcion: '),
+                  controller: funcionSegundaDerivada_Controller,
+                  keyboardType: TextInputType.text,
+                  validator: (val) =>
+                  val?.length == 0 ? 'No has ingresado la funcion' : null,
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          hintText: 'Valor inicial de x:',
+                        ),
+                        controller: xInicial_Controller,
+                        keyboardType: TextInputType.number,
+                        validator: (val) => NotDoubleCheck(val)
+                            ? 'Introduce un valor numerico'
+                            : null,
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    Expanded(
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          hintText: 'Error a encontrar:',
+                        ),
+                        controller: errorEncontrar_Controller,
+                        keyboardType: TextInputType.number,
+                        validator: (val) => NotDoubleCheck(val)
+                            ? 'Introduce un valor numerico'
+                            : null,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 10),
+                ElevatedButton(
+                  onPressed:validate,
+                  child: Text(
+                    'Calcular',
+                    style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  style: ElevatedButton.styleFrom(primary: Colors.lightGreen),
+                ),
+                DataTable(
+                  columns: [
+                    DataColumn(label: Text('Iteracion')),
+                    DataColumn(label: Text('x')),
+                    DataColumn(label: Text('Error')),
+                  ],
+                  rows: _rowsNormal,
+                ),
+              ],
+            ),
+          ),
+          ),
+        )
     );
   }
 }
@@ -281,10 +308,10 @@ class _NewtonRaphsonMejoradoState extends State<NewtonRaphsonMejorado> {
           funcion, funcionDerivada, funcionSegundaDerivada, xInicial, error);
 
       funcion_Controller.text = "";
-      funcionDerivada_Controller.text = "";
+   funcionDerivada_Controller.text = "";
       funcionSegundaDerivada_Controller.text = "";
-      xInicial_Controller.text = " ";
-      errorEncontrar_Controller.text = " ";
+     xInicial_Controller.text = " ";
+     errorEncontrar_Controller.text = " ";
     }
   }
   bool NotDoubleCheck(var N) {
@@ -309,6 +336,7 @@ class _NewtonRaphsonMejoradoState extends State<NewtonRaphsonMejorado> {
           child: Form(
             key: formKey, // referencia a la clave global del formulario
             autovalidateMode: AutovalidateMode.always, // activa la validación automática
+            child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -390,7 +418,9 @@ class _NewtonRaphsonMejoradoState extends State<NewtonRaphsonMejorado> {
               ],
             ),
           ),
-        ));
+          ),
+        )
+    );
   }
 }
 
@@ -412,13 +442,13 @@ class Ejemplo extends StatelessWidget {
   }
 }
 
-MetodosNewtonNormal metodos = new MetodosNewtonNormal();
+NewtonNormal metodos = new NewtonNormal();
 List<dynamic> resultados = metodos.problema1([], [], []);
 List<double> errorestabla = resultados[0];
 List<int> iteraciones = resultados[1];
 List<double> xitabla = resultados[2];
 
-List<DataRow> _rows = createDataRowList(iteraciones, xitabla, errorestabla);
+List<DataRow> _rowsNormal = createDataRowList(iteraciones, xitabla, errorestabla);
 
 List<DataRow> createDataRowList(
     List<int> iteraciones, List<double> xitabla, List<double> errorestabla) {
@@ -431,6 +461,7 @@ List<DataRow> createDataRowList(
     ]);
   }).toList();
 }
+
 
 //Filas para tabla de Newton Mejorado
 MetodoMejorado mejorado = new MetodoMejorado();
@@ -453,9 +484,9 @@ List<DataRow> createDataRowListMejorado(
 List<DataRow> _rowsMejorado = createDataRowListMejorado(iteracionesMejorado, xitablaMejorado, errorestablaMejorado);
 
 
-class MetodosNewtonNormal {
+class NewtonNormal {
   List<dynamic> problema1(
-      List<int> iteraciones, List<double> xitabla, List<double> errorestabla) {
+      List<int> iteraciones, List<double> xitabla, List<double> errorestabla,expFuncion ,expDerivada ,xInicial ,error ) {
     //Newton Raphson normal
     iteraciones.clear();
     xitabla.clear();
