@@ -114,6 +114,22 @@ class MyApp extends StatelessWidget {
   }
 }
 
+class Datos {
+  late String funcion,funcionDerivada,funcionSegundaDerivada;
+  late double xInicial,error;
+
+  Datos.normal(this.funcion, this.funcionDerivada, this.xInicial, this.error);
+
+  Datos.withSegundaDerivada(
+      this.funcion, this.funcionDerivada, this.funcionSegundaDerivada, this.xInicial, this.error);
+}
+
+class NewtonRaphsonMejorado extends StatefulWidget {
+  @override
+  _NewtonRaphsonMejoradoState createState() => _NewtonRaphsonMejoradoState();
+}
+
+
 class NewtonRaphsonNormal extends StatefulWidget {
   @override
   _NewtonRaphsonNormalState createState() => _NewtonRaphsonNormalState();
@@ -122,25 +138,25 @@ class NewtonRaphsonNormal extends StatefulWidget {
 class _NewtonRaphsonNormalState extends State<NewtonRaphsonNormal> {
 
   final formKey = new GlobalKey<FormState>();
-  var funcion_Controller = new TextEditingController();
-  var funcionDerivada_Controller = new TextEditingController();
-  var xInicial_Controller = new TextEditingController();
-  var errorEncontrar_Controller = new TextEditingController();
+  var funcionN_Controller = new TextEditingController();
+  var funcionDerivadaN_Controller = new TextEditingController();
+  var xInicialN_Controller = new TextEditingController();
+  var errorEncontrarN_Controller = new TextEditingController();
 
-  validate() {
+  validate(){
     if (formKey.currentState!.validate()) {
 
-      String funcion = funcion_Controller.text;
-      String funcionDerivada = funcionDerivada_Controller.text;
-      double xInicial = double.parse(xInicial_Controller.text);
-      double error = double.parse(errorEncontrar_Controller.text);
-      Datos datos = Datos(
+      String funcion = funcionN_Controller.text;
+      String funcionDerivada = funcionDerivadaN_Controller.text;
+      double xInicial = double.parse(xInicialN_Controller.text);
+      double error = double.parse(errorEncontrarN_Controller.text);
+      Datos datos = Datos.normal(
           funcion, funcionDerivada, xInicial, error);
 
-      funcion_Controller.text = "";
-      funcionDerivada_Controller.text = "";
-      xInicial_Controller.text = " ";
-      errorEncontrar_Controller.text = " ";
+      funcionN_Controller.text = "";
+      funcionDerivadaN_Controller.text = "";
+      xInicialN_Controller.text = " ";
+      errorEncontrarN_Controller.text = " ";
 
     }
   }
@@ -172,7 +188,7 @@ class _NewtonRaphsonNormalState extends State<NewtonRaphsonNormal> {
                   10), // Espacio en blanco para separar del borde superior
               TextFormField(
                 decoration: InputDecoration(hintText: 'Introduce la función: '),
-                controller: funcion_Controller,
+                controller: funcionN_Controller,
                 keyboardType: TextInputType.text,
                 validator: (val) =>
                 val?.length == 0 ? 'No has ingresado la funcion' : null,
@@ -180,7 +196,7 @@ class _NewtonRaphsonNormalState extends State<NewtonRaphsonNormal> {
               TextFormField(
                 decoration:
                 InputDecoration(hintText: 'Introduce la funcion derivada: '),
-                controller: funcionDerivada_Controller,
+                controller: funcionDerivadaN_Controller,
                 keyboardType: TextInputType.text,
                 validator: (val) =>
                 val!.length == 0 ? 'No has ingresado la función derivada' : null,
@@ -193,7 +209,7 @@ class _NewtonRaphsonNormalState extends State<NewtonRaphsonNormal> {
                       decoration: InputDecoration(
                         hintText: 'Valor inicial de x:',
                       ),
-                      controller: xInicial_Controller,
+                      controller: xInicialN_Controller,
                       keyboardType: TextInputType.number,
                       validator: (val) => NotDoubleCheck(val)
                           ? 'Introduce un valor numerico'
@@ -206,7 +222,7 @@ class _NewtonRaphsonNormalState extends State<NewtonRaphsonNormal> {
                       decoration: InputDecoration(
                         hintText: 'Error a encontrar:',
                       ),
-                      controller: errorEncontrar_Controller,
+                      controller: errorEncontrarN_Controller,
                       keyboardType: TextInputType.number,
                       validator: (val) => NotDoubleCheck(val)
                           ? 'Introduce un valor numerico'
@@ -217,7 +233,7 @@ class _NewtonRaphsonNormalState extends State<NewtonRaphsonNormal> {
               ),
               SizedBox(height: 10),
               ElevatedButton(
-                onPressed: validate,
+                onPressed:validate,
                 child: Text(
                   'Calcular',
                   style: TextStyle(
@@ -243,24 +259,10 @@ class _NewtonRaphsonNormalState extends State<NewtonRaphsonNormal> {
   }
 }
 
-class NewtonRaphsonMejorado extends StatefulWidget {
-  @override
-  _NewtonRaphsonMejoradoState createState() => _NewtonRaphsonMejoradoState();
-}
-
-class Datos {
-  late String funcion,funcionDerivada,funcionSegundaDerivada;
-  late double xInicial,error;
-
-  Datos(this.funcion, this.funcionDerivada, this.xInicial, this.error);
-
-  Datos.withSegundaDerivada(
-      this.funcion, this.funcionDerivada, this.funcionSegundaDerivada, this.xInicial, this.error);
-}
-
 
 
 class _NewtonRaphsonMejoradoState extends State<NewtonRaphsonMejorado> {
+
   final formKey = new GlobalKey<FormState>();
   var funcion_Controller = new TextEditingController();
   var funcionDerivada_Controller = new TextEditingController();
@@ -367,7 +369,7 @@ class _NewtonRaphsonMejoradoState extends State<NewtonRaphsonMejorado> {
                 ),
                 SizedBox(height: 10),
                 ElevatedButton(
-                  onPressed: validate,
+                  onPressed:validate,
                   child: Text(
                     'Calcular',
                     style: TextStyle(
@@ -439,10 +441,10 @@ List<double> xitablaMejorado = resultadosMejorado[2];
 
 List<DataRow> createDataRowListMejorado(
     List<int> iteracionesMejorado, List<double> xitablaMejorado, List<double> errorestablaMejorado) {
-  return iteracionesMejorado.map((iteracion) {
-    int index = iteracionesMejorado.indexOf(iteracion);
+  return iteracionesMejorado.map((iteracionMejorado) {
+    int index = iteracionesMejorado.indexOf(iteracionMejorado);
     return DataRow(cells: [
-      DataCell(Text(iteracion.toString())),
+      DataCell(Text(iteracionMejorado.toString())),
       DataCell(Text(xitablaMejorado[index].toString())),
       DataCell(Text(errorestablaMejorado[index].toString())),
     ]);
@@ -483,9 +485,9 @@ class MetodosNewtonNormal {
 class MetodoMejorado {
   List<dynamic> problema2(List<int> iteracionesMejorado, List<double> xitablaMejorado,
       List<double> errorestablaMejorado, double xi, double error) {
-    iteraciones.clear();
-    xitabla.clear();
-    errorestabla.clear();
+    iteracionesMejorado.clear();
+    xitablaMejorado.clear();
+    errorestablaMejorado.clear();
     int iteracionesX = 0;
     double fxi, dfxi, ddfxi, xn, errorPorcentual;
     do {
